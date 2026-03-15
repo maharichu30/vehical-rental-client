@@ -20,7 +20,7 @@ It allows users to browse cars, book vehicles, make payments, request to become 
 
 Clone the repository 
 
-git clone "http://github.com/maharichu30/client"
+git clone "http://github.com/maharichu30/vehical-rental-client"
 
 Navigate to frontend folder
 
