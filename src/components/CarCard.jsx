@@ -32,10 +32,11 @@ function CarCard({ car }) {
   return (
     <Link to={`/car/${car._id}`}>
       <div className="bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition text-white cursor-pointer">
-        
         <div className="relative">
           <img
-            src={car.image || "https://via.placeholder.com/400x250?text=No+Image"}
+            src={
+              car.image || "https://via.placeholder.com/400x250?text=No+Image"
+            }
             alt={car.name}
             className="w-full h-48 object-cover"
           />
@@ -54,29 +55,22 @@ function CarCard({ car }) {
         </div>
 
         <div className="p-4">
-          <h2 className="text-lg font-bold text-green-400">
-            {car.name}
-          </h2>
+          <h2 className="text-lg font-bold text-green-400">{car.name}</h2>
 
           <p className="text-sm text-gray-300 mt-1">
             {car.transmission} • {car.fuelType} • {car.seats} Seater
           </p>
 
-          <p className="text-sm text-gray-400 mt-1">
-            📍 {car.location}
-          </p>
+          <p className="text-sm text-gray-400 mt-1">📍 {car.location}</p>
 
           <div className="flex justify-between items-center mt-3">
-            <p className="text-green-400 font-bold">
-              ₹{car.pricePerHour} / hr
-            </p>
+            <p className="text-green-400 font-bold">₹{car.pricePerHour} / hr</p>
 
             <button className="bg-green-400 text-black px-3 py-1 rounded">
               View
             </button>
           </div>
         </div>
-
       </div>
     </Link>
   );

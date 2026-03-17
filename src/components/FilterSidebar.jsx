@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
-
   const minLimit = 0;
   const maxLimit = 5000;
 
@@ -47,17 +46,13 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
 
   return (
     <div className="bg-gray-900 p-5 rounded-xl text-white sticky top-24">
-
-      <h2 className="text-xl font-bold text-green-400 mb-4">
-        Filters
-      </h2>
+      <h2 className="text-xl font-bold text-green-400 mb-4">Filters</h2>
 
       {/* PRICE RANGE */}
       <div className="mb-6">
         <label className="block mb-3">Price Range</label>
 
         <div className="relative h-8">
-
           <input
             type="range"
             min={minLimit}
@@ -75,7 +70,6 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
             onChange={handleMaxChange}
             className="absolute w-full appearance-none h-2 bg-green-400 rounded"
           />
-
         </div>
 
         <div className="flex justify-between text-sm text-gray-400 mt-2">
@@ -149,7 +143,6 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
           Clear
         </button>
       </div>
-
     </div>
   );
 }

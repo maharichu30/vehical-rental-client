@@ -6,7 +6,7 @@ function Slider() {
     "https://images.unsplash.com/photo-1503376780353-7e6692767b70",
     "https://images.unsplash.com/photo-1511919884226-fd3cad34687c",
     "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d",
-    "https://images.unsplash.com/photo-1493238792000-8113da705763"
+    "https://images.unsplash.com/photo-1493238792000-8113da705763",
   ];
 
   const [current, setCurrent] = useState(0);
@@ -36,9 +36,7 @@ function Slider() {
   };
 
   const prevSlide = () => {
-    setCurrent((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   return (

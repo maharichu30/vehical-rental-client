@@ -63,7 +63,6 @@ function SearchSection({ onSearch }) {
         onSubmit={handleSubmit}
         className="max-w-6xl mx-auto bg-gray-900 p-6 rounded-xl grid grid-cols-1 md:grid-cols-4 gap-4 items-center"
       >
-
         {/* LOCATION */}
         <input
           list="cities"
