@@ -1,36 +1,49 @@
-
+import { useEffect } from "react";
 
 function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
 
-  const minLimit = 0
-  const maxLimit = 5000
+  const minLimit = 0;
+  const maxLimit = 5000;
+
+  // ✅ Ensure default values
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: prev.minPrice || minLimit,
+      maxPrice: prev.maxPrice || maxLimit,
+    }));
+  }, []);
 
   const handleMinChange = (e) => {
-    const value = Math.min(Number(e.target.value), filters.maxPrice - 100)
+    const value = Number(e.target.value);
+
+    if (value >= filters.maxPrice) return;
 
     setFilters((prev) => ({
       ...prev,
       minPrice: value,
-    }))
-  }
+    }));
+  };
 
   const handleMaxChange = (e) => {
-    const value = Math.max(Number(e.target.value), filters.minPrice + 100)
+    const value = Number(e.target.value);
+
+    if (value <= filters.minPrice) return;
 
     setFilters((prev) => ({
       ...prev,
       maxPrice: value,
-    }))
-  }
+    }));
+  };
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
 
     setFilters((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   return (
     <div className="bg-gray-900 p-5 rounded-xl text-white sticky top-24">
@@ -39,14 +52,11 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
         Filters
       </h2>
 
-
+      {/* PRICE RANGE */}
       <div className="mb-6">
-
         <label className="block mb-3">Price Range</label>
 
         <div className="relative h-8">
-
-        
 
           <input
             type="range"
@@ -54,7 +64,7 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
             max={maxLimit}
             value={filters.minPrice}
             onChange={handleMinChange}
-            className="absolute w-full pointer-events-none appearance-none h-2 bg-green-400 rounded"
+            className="absolute w-full appearance-none h-2 bg-green-400 rounded"
           />
 
           <input
@@ -69,17 +79,13 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
         </div>
 
         <div className="flex justify-between text-sm text-gray-400 mt-2">
-
           <span>₹{filters.minPrice}</span>
           <span>₹{filters.maxPrice}</span>
-
         </div>
-
       </div>
 
-
+      {/* FUEL TYPE */}
       <div className="mb-4">
-
         <label className="block mb-1">Fuel Type</label>
 
         <select
@@ -88,20 +94,15 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
           onChange={handleChange}
           className="w-full p-2 bg-black border border-green-400 rounded"
         >
-
           <option value="">All</option>
           <option value="Petrol">Petrol</option>
           <option value="Diesel">Diesel</option>
           <option value="Electric">Electric</option>
-
         </select>
-
       </div>
 
-
-
+      {/* SEATS */}
       <div className="mb-4">
-
         <label className="block mb-1">Seats</label>
 
         <select
@@ -110,19 +111,14 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
           onChange={handleChange}
           className="w-full p-2 bg-black border border-green-400 rounded"
         >
-
           <option value="">All</option>
           <option value="5">5 Seater</option>
           <option value="7">7 Seater</option>
-
         </select>
-
       </div>
 
-
-
+      {/* TRANSMISSION */}
       <div className="mb-4">
-
         <label className="block mb-1">Transmission</label>
 
         <select
@@ -131,19 +127,14 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
           onChange={handleChange}
           className="w-full p-2 bg-black border border-green-400 rounded"
         >
-
           <option value="">All</option>
           <option value="Manual">Manual</option>
           <option value="Automatic">Automatic</option>
-
         </select>
-
       </div>
 
-
-
+      {/* BUTTONS */}
       <div className="flex gap-2">
-
         <button
           onClick={applyFilters}
           className="w-full bg-green-400 text-black py-2 rounded font-bold hover:bg-green-300"
@@ -157,11 +148,10 @@ function FilterSidebar({ filters, setFilters, applyFilters, clearFilters }) {
         >
           Clear
         </button>
-
       </div>
 
     </div>
-  )
+  );
 }
 
-export default FilterSidebar
+export default FilterSidebar;

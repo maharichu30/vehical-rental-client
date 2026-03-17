@@ -1,53 +1,39 @@
-import { Link } from "react-router-dom"
-import { useState } from "react"
-import { FaHeart } from "react-icons/fa"
-import API from "../services/api"
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { FaHeart } from "react-icons/fa";
+import API from "../services/api";
 
 function CarCard({ car }) {
-
-  const [wishlisted, setWishlisted] = useState(false)
+  const [wishlisted, setWishlisted] = useState(false);
+  const navigate = useNavigate();
 
   const handleWishlist = async (e) => {
+    e.preventDefault(); // prevent card click
 
-    e.preventDefault()
-
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Please login")
-      return
+      alert("Please login first");
+      navigate("/login");
+      return;
     }
 
     try {
+      await API.post("/wishlist/toggle", {
+        carId: car._id,
+      });
 
-      await API.post(
-        "/wishlist/toggle",
-        { carId: car._id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-
-      setWishlisted(!wishlisted)
-
+      setWishlisted(!wishlisted);
     } catch (error) {
-
-      console.log("Wishlist error:", error)
-
+      console.log("Wishlist error:", error);
     }
-
-  }
+  };
 
   return (
-
     <Link to={`/car/${car._id}`}>
-
       <div className="bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition text-white cursor-pointer">
-
+        
         <div className="relative">
-
           <img
             src={car.image || "https://via.placeholder.com/400x250?text=No+Image"}
             alt={car.name}
@@ -55,24 +41,19 @@ function CarCard({ car }) {
           />
 
           {/* Wishlist Button */}
-
           <div
             onClick={handleWishlist}
             className="absolute top-2 right-2 bg-black p-2 rounded-full cursor-pointer"
           >
-
             <FaHeart
               className={`text-xl ${
                 wishlisted ? "text-red-500" : "text-white"
               }`}
             />
-
           </div>
-
         </div>
 
         <div className="p-4">
-
           <h2 className="text-lg font-bold text-green-400">
             {car.name}
           </h2>
@@ -86,7 +67,6 @@ function CarCard({ car }) {
           </p>
 
           <div className="flex justify-between items-center mt-3">
-
             <p className="text-green-400 font-bold">
               ₹{car.pricePerHour} / hr
             </p>
@@ -94,17 +74,12 @@ function CarCard({ car }) {
             <button className="bg-green-400 text-black px-3 py-1 rounded">
               View
             </button>
-
           </div>
-
         </div>
 
       </div>
-
     </Link>
-
-  )
-
+  );
 }
 
-export default CarCard
+export default CarCard;
