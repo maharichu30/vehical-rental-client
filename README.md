@@ -18,9 +18,9 @@ It allows users to browse cars, book vehicles, make payments, request to become 
 
 # ⚙️ Installation
 
-Clone the repository
+Clone the repository 
 
-git clone https://github.com/yourusername/vehicle-rental.git
+git clone "http://github.com/maharichu30/vehical-rental-client"
 
 Navigate to frontend folder
 
