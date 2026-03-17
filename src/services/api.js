@@ -1,7 +1,10 @@
-import axios from "axios"
+import axios from "axios";
+import dotenv from ".env";
+
+dotenv.config();
 
 const API = axios.create({
- baseURL: "http://localhost:3008/api"
-})
+  baseURL: import.meta.env.VITE_API_URL,
+});
 
-export default API
+export default API;
