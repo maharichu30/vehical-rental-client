@@ -1,59 +1,62 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
-import { FaEnvelope } from "react-icons/fa"
-import API from "../services/api"
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { FaEnvelope } from "react-icons/fa";
+import API from "../services/api";
 
 function ForgotPassword() {
-
-  const [email, setEmail] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
 
     if (!email) {
-      alert("Email required")
-      return
+      alert("Email required");
+      return;
     }
 
     if (!/^\S+@\S+\.\S+$/.test(email)) {
-      alert("Invalid email")
-      return
+      alert("Invalid email");
+      return;
     }
 
     try {
+      setLoading(true);
 
-      const res = await API.post("/auth/forgot-password", { email })
+      const res = await API.post("/auth/forgot-password", { email });
 
-      alert(res.data.message)
+      alert(res.data.message || "Reset link sent ✅");
+
+      setEmail(""); // ✅ clear input after success
 
     } catch (error) {
+      console.log("FORGOT ERROR:", error);
 
-      console.log(error)
+      // ✅ Better error handling
+      if (error.response) {
+        alert(error.response.data.message || "Server error");
+      } else if (error.request) {
+        alert("Network error. Check backend connection");
+      } else {
+        alert("Something went wrong");
+      }
 
-      alert(error.response?.data?.message || "Something went wrong")
-
+    } finally {
+      setLoading(false); // ✅ always stop loading
     }
-
-    setLoading(false)
-
-  }
+  };
 
   return (
-
     <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden px-4">
 
       {/* Background Image */}
-
       <img
         src="https://images.unsplash.com/photo-1503376780353-7e6692767b70"
+        alt="bg"
         className="absolute w-full h-full object-cover opacity-25"
       />
 
       {/* Card */}
-
       <div className="relative w-full max-w-md bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
 
         <h2 className="text-3xl font-bold text-center text-green-400 mb-2">
@@ -64,67 +67,44 @@ function ForgotPassword() {
           Enter your email and we will send a password reset link
         </p>
 
-
         <form onSubmit={handleSubmit} className="space-y-5">
 
           {/* Email Input */}
-
           <div className="flex items-center bg-black border border-gray-700 rounded-lg px-3 focus-within:border-green-400">
-
-            <FaEnvelope className="text-gray-400 mr-2"/>
+            <FaEnvelope className="text-gray-400 mr-2" />
 
             <input
               type="email"
               required
               placeholder="example@email.com"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 bg-transparent outline-none text-white"
             />
-
           </div>
 
-
           {/* Submit Button */}
-
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-green-400 hover:bg-green-500 text-black font-semibold py-3 rounded-lg transition duration-300 shadow-lg flex items-center justify-center"
           >
-
-            {loading ? (
-              <span className="animate-pulse">Sending...</span>
-            ) : (
-              "Send Reset Link"
-            )}
-
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
 
         </form>
 
-
         {/* Login Link */}
-
         <p className="text-center text-gray-500 text-sm mt-6">
-
           Remember your password?
-
-          <Link
-            to="/login"
-            className="text-green-400 ml-1 hover:underline"
-          >
+          <Link to="/login" className="text-green-400 ml-1 hover:underline">
             Login
           </Link>
-
         </p>
 
       </div>
-
     </div>
-
-  )
-
+  );
 }
 
-export default ForgotPassword
+export default ForgotPassword;
