@@ -40,8 +40,7 @@ function Booking() {
     const pricePerWeek = Number(car.pricePerWeek || 0);
 
     if (durationType === "hour") {
-      const hours = diffDays * 24;
-      price = hours * pricePerHour;
+      price = diffDays * 24 * pricePerHour;
     }
 
     if (durationType === "day") {
@@ -77,7 +76,6 @@ function Booking() {
     }
   };
 
-  // check if selected date overlaps with booked range
   const isDateBooked = (date) => {
     const selected = new Date(date);
 
@@ -94,7 +92,6 @@ function Booking() {
       alert("This date is already booked");
       return;
     }
-
     setStartDate(date);
   };
 
@@ -103,96 +100,75 @@ function Booking() {
       alert("This date is already booked");
       return;
     }
-
     setEndDate(date);
   };
 
+  // 🔥 FINAL PAYMENT FUNCTION
   const handleProceedPayment = async () => {
-    const token = localStorage.getItem("token");
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
     if (!startDate || !endDate) {
-      alert("Please select start and end date");
+      alert("Select dates");
       return;
     }
 
-    if (!totalPrice || totalPrice <= 0) {
-      alert("Invalid price calculation");
+    if (new Date(endDate) <= new Date(startDate)) {
+      alert("End date must be after start date");
+      return;
+    }
+
+    // ✅ NEW FIX
+    if (totalPrice <= 0) {
+      alert("Invalid price");
+      return;
+    }
+
+    // ✅ Razorpay check
+    if (!window.Razorpay) {
+      alert("Razorpay not loaded. Refresh page.");
       return;
     }
 
     try {
-      const res = await API.post(
-        "/payment/create-order",
-        { amount: totalPrice },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      // STEP 1
+      const { data } = await API.post("/payment/create-order", {
+        amount: totalPrice,
+        carId: id,
+      });
 
-      if (!window.Razorpay) {
-        alert("Razorpay SDK not loaded");
-        return;
-      }
-
+      // STEP 2
       const options = {
-        key: "rzp_test_SLc1iUyRWlt4Yx",
-        amount: res.data.amount,
-        currency: res.data.currency,
-        name: "DriveNow",
-        description: `Booking payment for ${car.name}`,
-        order_id: res.data.id,
+        key: import.meta.env.VITE_RAZORPAY_KEY,
+        amount: data.amount,
+        currency: "INR",
+        order_id: data.orderId,
 
         handler: async function (response) {
           try {
-            await API.post(
-              "/payment/verify",
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                carId: car._id,
-                startDate,
-                endDate,
-                totalPrice,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
+            await API.post("/payment/verify", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              carId: id,
+              startDate,
+              endDate,
+              totalPrice,
+            });
 
-            alert("Payment successful & booking confirmed");
-            navigate("/");
-          } catch (error) {
-            console.log("Verify payment error:", error);
+            alert("Booking confirmed ✅");
+            navigate("/my-bookings");
+
+          } catch (err) {
+            console.log(err);
             alert("Payment verification failed");
           }
         },
-
-        prefill: {
-          name: storedUser?.name || "",
-          email: storedUser?.email || "",
-        },
-
-        theme: {
-          color: "#22c55e",
-        },
       };
 
-      const razor = new window.Razorpay(options);
-      razor.open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
     } catch (error) {
-      console.log("Create order error:", error);
-      alert("Payment popup failed");
+      console.log(error);
+      alert("Payment failed");
     }
   };
 

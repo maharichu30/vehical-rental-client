@@ -10,8 +10,6 @@ function CarCard({ car }) {
   const handleWishlist = async (e) => {
     e.preventDefault(); // prevent card click
 
-    const token = localStorage.getItem("token");
-
     if (!token) {
       alert("Please login first");
       navigate("/login");

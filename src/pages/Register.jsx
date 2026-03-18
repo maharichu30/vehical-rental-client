@@ -28,8 +28,18 @@ function Register() {
 
     e.preventDefault()
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match")
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      alert("Invalid email format")
+      return
+    }
+
+    if (!/^\d{10}$/.test(formData.mobile)) {
+      alert("Mobile must be 10 digits")
+      return
+    }
+
+    if (formData.password.length < 6) {
+      alert("Password must be at least 6 characters")
       return
     }
 

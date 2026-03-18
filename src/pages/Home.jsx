@@ -56,6 +56,11 @@ function Home() {
     if (endDate) {
       params.append("endDate", endDate.toISOString())
     }
+    
+    if (!location || !startDate || !endDate) {
+      alert("Fill all fields")
+      return
+    }
 
     navigate(`/cars?${params.toString()}`)
 

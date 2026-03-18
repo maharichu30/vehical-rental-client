@@ -21,6 +21,11 @@ function ResetPassword() {
       return
     }
 
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters")
+      return
+    }
+
     setLoading(true)
 
     try {

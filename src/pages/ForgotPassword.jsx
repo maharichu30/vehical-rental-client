@@ -13,6 +13,16 @@ function ForgotPassword() {
     e.preventDefault()
     setLoading(true)
 
+    if (!email) {
+      alert("Email required")
+      return
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      alert("Invalid email")
+      return
+    }
+
     try {
 
       const res = await API.post("/auth/forgot-password", { email })
