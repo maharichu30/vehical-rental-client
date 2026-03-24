@@ -1,11 +1,11 @@
 import axios from "axios"
 
 const API = axios.create({
-  baseURL: "https://vehical-rental-server.onrender.com/api"
+  baseURL: import.meta.env.VITE_API_URL
 })
 
-// 🔥 AUTO TOKEN ATTACH
 API.interceptors.request.use((config) => {
+
   const token = localStorage.getItem("token")
 
   if (token) {

@@ -6,10 +6,6 @@ function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-
-  const navigate = useNavigate();
-
   useEffect(() => {
     fetchBookings();
   }, []);
