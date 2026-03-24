@@ -163,6 +163,23 @@ function Register() {
 
           </div>
 
+          {/* confirm Password */}
+
+          <div className="flex items-center bg-black border border-gray-700 rounded-lg px-3 focus-within:border-green-400">
+
+            <FaLock className="text-gray-400 mr-2"/>
+
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              onChange={handleChange}
+              className="w-full p-3 bg-transparent outline-none text-white"
+              required
+            />
+
+          </div>
+
 
           {/* Register Button */}
 
